@@ -2,6 +2,10 @@
 
 import os
 import math
+from collections import namedtuple
+
+
+Point = namedtuple('Point', ['x', 'y'])
 
 
 def load_directions(fname='input.txt'):
@@ -15,24 +19,24 @@ def load_directions(fname='input.txt'):
 
 def main(directions=load_directions()):
 
-    def hexdist(x, y):
-        return max(map(abs, pos + [pos[0] - pos[1]]))
+    pos = Point(0, 0)
+    hexmap = {'n': Point(0, 1),
+              'ne': Point(1, 1),
+              'se': Point(1, 0),
+              's': Point(0, -1),
+              'sw': Point(-1, -1),
+              'nw': Point(-1, 0)}
 
-    pos = [0, 0]
-    hexmap = {'n': [0, 1],
-              'ne': [1, 1],
-              'se': [1, 0],
-              's': [0, -1],
-              'sw': [-1, -1],
-              'nw': [-1, 0]}
+    def hexdist(x, y):
+        return max(map(abs, [x, y, x - y]))
 
     max_distance = 0
     for direction in directions:
         move = hexmap[direction]
-        pos = [pos[0] + move[0], pos[1] + move[1]]
-        max_distance = max(max_distance, hexdist(pos[0], pos[1]))
+        pos = Point(pos.x + move.x, pos.y + move.y)
+        max_distance = max(max_distance, hexdist(pos.x, pos.y))
 
-    return hexdist(pos[0], pos[1]), max_distance
+    return hexdist(pos.x, pos.y), max_distance
 
 
 def tests():
