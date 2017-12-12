@@ -15,20 +15,24 @@ def load_directions(fname='input.txt'):
 
 def main(directions=load_directions()):
 
+    def hexdist(x, y):
+        return max(map(abs, pos + [pos[0] - pos[1]]))
+
     pos = [0, 0]
-    dmap = {'n': [0, 1],
-            'ne': [1, 1],
-            'se': [1, 0],
-            's': [0, -1],
-            'sw': [-1, -1],
-            'nw': [-1, 0]}
+    hexmap = {'n': [0, 1],
+              'ne': [1, 1],
+              'se': [1, 0],
+              's': [0, -1],
+              'sw': [-1, -1],
+              'nw': [-1, 0]}
+
+    max_distance = 0
     for direction in directions:
-        move = dmap[direction]
+        move = hexmap[direction]
         pos = [pos[0] + move[0], pos[1] + move[1]]
+        max_distance = max(max_distance, hexdist(pos[0], pos[1]))
 
-    dist = max(abs(pos[0]), abs(pos[1]), abs(pos[0] - pos[1]))
-
-    return dist
+    return hexdist(pos[0], pos[1]), max_distance
 
 
 def tests():
@@ -37,7 +41,7 @@ def tests():
                 ('ne,ne,s,s'.split(','), 2),
                 ('ne,ne,ne'.split(','), 3)]
     for directions, answer in examples:
-        guess = main(directions)
+        guess, _ = main(directions)
         print('-----------------------')
         print(directions, guess, answer)
         assert guess == answer
@@ -47,4 +51,4 @@ def tests():
 
 if __name__ == '__main__':
     tests()
-    print('The shortest distance is %d!' % main())
+    print('The shortest distance is %d (max distance is %d)!' % main())
