@@ -11,20 +11,16 @@ def load_input(fname):
     return data
 
 
-def main():
-    digseq = load_input('input.txt')
+def main(digseq, skip=1):
 
     total = 0
-    for i, s in enumerate(digseq[1:]):
-        if s == digseq[i]:
+    for i, s in enumerate(digseq):
+        if s == digseq[(i + skip) % len(digseq)]:
             total += int(s)
-
-    # wrap-around case
-    if digseq[0] == digseq[-1]:
-        total += int(digseq[0])
 
     return total
 
 
 if __name__ == '__main__':
-    print('CAPTCHA solution is: %d' % main())
+    digseq = load_input('input.txt')
+    print('CAPTCHA solutions are: %d, %d' % (main(digseq), main(digseq, len(digseq) // 2)))
