@@ -29,7 +29,6 @@ def knot_iteration(sparse_hash, lengths, pos, skip):
     return sparse_hash, pos, skip
 
 
-
 def knot_hash(chars):
     ascii_values = [ord(c) for c in chars]
     lengths = ascii_values + [17, 31, 73, 47, 23]
