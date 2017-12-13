@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import itertools
+from collections import defaultdict
+
 
 def main(target):
 
@@ -51,6 +54,41 @@ def main(target):
     return abs(target_pos[0]) + abs(target_pos[1]), target_pos
 
 
+def stress_test(target):
+    turns = {"right": "up", 
+                  "up": "left", 
+                  "left": "down", 
+                  "down": "right"}
+    counts = defaultdict(int)
+
+    def neighbors(i, j):
+        nothome = lambda x, y: x != 0 or y != 0
+        return [(i + a, j + b) for a in [-1, 0, 1] for b in [-1, 0, 1] if nothome(a, b)]
+
+    d = "right"
+    i, j = 0, 0
+    counts[(i, j)] = 1
+    steps_in_direction = itertools.count(1, 0.5)
+
+    while counts[(i, j)] < target:
+        steps = int(next(steps_in_direction))
+        for _ in range(steps):
+            if d == "right":
+                i += 1
+            elif d == "up":
+                j += 1
+            elif d == "left":
+                i -= 1
+            elif d == "down":
+                j -= 1
+
+            counts[(i, j)] = sum([counts[tup] for tup in neighbors(i, j)])
+
+        d = turns[d]
+
+    return counts[(i, j)]
+
+
 if __name__ == '__main__':
     # some simple tests
     # 2 => 1
@@ -58,3 +96,4 @@ if __name__ == '__main__':
     # 57 => 8
     target = 368078
     print('The Manhattan distance for %d is %s.' % (target, main(target)))
+    print('The first stress test value > our target is %d!' % stress_test(target))

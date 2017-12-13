@@ -21,6 +21,7 @@ def main(stream=get_stream()):
     # remove garbage strings from stream
     # using '-' as a replacement character
     in_garbage = False
+    total_garbage = 0
     for i, s in enumerate(stream):
 
         if s == '<' and in_garbage == False:
@@ -30,6 +31,7 @@ def main(stream=get_stream()):
             in_garbage = False
             end = i + 1
             stream = stream[0:start] + '-' * (end - start) + stream[end:]
+            total_garbage += end - start - 2
 
     stream = stream.replace('-', '')
 
@@ -43,7 +45,7 @@ def main(stream=get_stream()):
             nest -= 1
             score += nest
 
-    return score
+    return score, total_garbage
 
 
 def test():
@@ -64,4 +66,6 @@ def test():
 
 if __name__ == '__main__':
     #test()
-    print('The total score for all groups is %d!' % main())
+    score, garbage = main()
+    print('The total score for all groups is %d!' % score)
+    print('The total number of (non-cancelled) gargage characters was %d!' % garbage)

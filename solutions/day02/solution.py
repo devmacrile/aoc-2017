@@ -15,11 +15,23 @@ def load_input(fname):
     return rows
 
 
-def main():
+def checksum():
     rows = load_input('input.txt')
     checksum = sum(map(lambda x: max(x) - min(x), rows))
     return checksum
 
 
+def rowsum():
+    rows = load_input('input.txt')
+    mults = []
+    for row in rows:
+        for i, v in enumerate(row):
+            for w in row[i+1:]:
+                if max(v, w) % min(v, w) == 0:
+                    mults.append(max(v, w) // min(v, w))
+                    break
+    return sum(mults)
+
+
 if __name__ == '__main__':
-    print('The checksum is: %d' % main())
+    print('The checksum is: %d (the row result sum is %d)!' % (checksum(), rowsum()))

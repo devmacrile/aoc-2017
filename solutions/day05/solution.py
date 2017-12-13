@@ -25,6 +25,24 @@ def main():
 
     return steps
 
+def jumpagain():
+    instructions = load_instructions()
+
+    i = 0
+    steps = 0
+    while 0 <= i < len(instructions):
+        if instructions[i] < 3:
+            jump = 1
+        else:
+            jump = -1
+        
+        index = i
+        i += instructions[i]
+        instructions[index] += jump
+        steps += 1
+
+    return steps
 
 if __name__ == '__main__':
     print('Maze escaped in %d steps!' % main())
+    print('Damn, now the maze takes %d steps!' % jumpagain())

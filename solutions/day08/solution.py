@@ -18,6 +18,7 @@ def main():
     instructions = load_instruction_set()
     
     register = defaultdict(int)
+    register_ceiling = 0
 
     def get_mutation_params(instruction):
         variable, action, value = instruction.split()[:3]
@@ -40,8 +41,11 @@ def main():
             elif action == 'dec':
                 register[variable] -= value
 
-    return max(register.items(), key=lambda k: k[1])
+            register_ceiling = max(register_ceiling, register[variable])
+
+    variable, max_final = max(register.items(), key=lambda k: k[1])
+    return variable, max_final, register_ceiling
 
 
 if __name__ == '__main__':
-    print('The max register is "%s" with a value of %d!' % main())
+    print('The max register is ["%s" = %d], with the max value encountered %d!' % main())

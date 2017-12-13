@@ -2,6 +2,7 @@
 
 
 import operator
+from collections import defaultdict
 
 
 def main():
@@ -11,11 +12,11 @@ def main():
         return ','.join(map(str, banks))
 
     cycles = 0
-    cache = set()
+    cache = defaultdict(int)
     key = state_key(banks)
 
     while key not in cache:
-        cache.add(key)
+        cache[key] = cycles
 
         index, blocks = max(enumerate(banks), key=operator.itemgetter(1))
         banks[index] = 0
@@ -25,8 +26,8 @@ def main():
         cycles += 1
         key = state_key(banks)
 
-    return cycles
+    return cycles, cycles - cache[key]
 
 
 if __name__ == '__main__':
-    print('The number of cycles before repeat is %d!' % main())
+    print('The number of cycles before repeat is %d (loop size = %d)!' % main())
