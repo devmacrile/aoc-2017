@@ -3,21 +3,6 @@
 import os
 from collections import namedtuple
 
-"""
-class Scanner(object):
-
-    def __init__(self, depth, range_, position=0):
-        self.depth = depth
-        self.range = range_
-        self.position = position
-
-    @property
-    def period(self):
-        return 2 * (self.range - 1)
-
-    def __repr__(self):
-        return 'Scanner(depth=%d, range=%d, period=%d)' % (self.depth, self.range, self.period)
-"""
 
 def load_firewall(fname='input.txt'):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -38,17 +23,33 @@ def period(scanner):
     return 2 * (scanner.range - 1)
 
 
-def compute_severity():
-    firewall = load_firewall()
-    severity = 0
+def compute_severity(firewall, offset=0):
+    severity, times_caught = 0, 0
     for depth, scanner in firewall.iteritems():
-        if scanner.depth >= period(scanner):
-            if scanner.depth % period(scanner) == 0:
-                severity += scanner.depth * scanner.range
-    return severity
+        ostensible_depth = depth + offset
+        if ostensible_depth % period(scanner) == 0:
+            severity += scanner.depth * scanner.range
+            times_caught += 1
+    return severity, times_caught
+
+
+def packet_caught(firewall, offset):
+    for depth, scanner in firewall.iteritems():
+        if (depth + offset) % period(scanner) == 0:
+            return True
+    return False
+
+
+def compute_safe_offset(firewall):
+    offset = 0
+    while packet_caught(firewall, offset):
+        offset += 1
+    return offset
 
 
 if __name__ == '__main__':
-    print('Total severity is %d!' % compute_severity())
+    firewall = load_firewall()
+    print('Total severity is %d (caught %d times)!' % compute_severity(firewall))
+    print('First safe offset is %d!' % compute_safe_offset(firewall))
 
 
