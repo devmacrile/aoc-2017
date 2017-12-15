@@ -43,7 +43,7 @@ def knot_hash(chars):
         start, end = 16 * i, 16 * (i + 1)
         densehash.append(reduce(lambda x, y: x ^ y, sparse_hash[start:end]))
 
-    return ''.join(map(lambda x: format(x, 'x'), densehash))
+    return ''.join(map(lambda x: format(x, 'x').zfill(2), densehash))
 
 if __name__ == '__main__':
     chars = '129,154,49,198,200,133,97,254,41,6,2,1,255,0,191,108'
