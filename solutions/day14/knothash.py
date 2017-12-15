@@ -4,6 +4,7 @@ Knot-hash algorithm from Day 10.
 
 from functools import reduce
 
+
 def knot_iteration(sparse_hash, lengths, pos, skip):
     for length in lengths:
         if length >= len(sparse_hash):
@@ -37,4 +38,4 @@ def knot_hash(chars):
         start, end = 16 * i, 16 * (i + 1)
         densehash.append(reduce(lambda x, y: x ^ y, sparse_hash[start:end]))
 
-    return ''.join(map(lambda x: format(x, 'x'), densehash))
+    return ''.join(map(lambda x: format(x, 'x').zfill(2), densehash))

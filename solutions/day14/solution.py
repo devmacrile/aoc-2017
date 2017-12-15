@@ -1,16 +1,47 @@
 # -*- coding: utf-8 -*-
 
+from collections import deque
+
 from knothash import knot_hash
 
 
-def used_count(keystring, disk_dim=(128, 128)):
-    occupied = 0
-    for i in range(disk_dim[0]):
-        hash_input = '-'.join([keystring, str(i)])
-        hash_value = knot_hash(hash_input)
-        binary = bin(int(hash_value, 16))[2:]
-        occupied += sum(map(int, str(binary)))
+def hextobinary(hexval):
+    assert len(hexval) == 32
+    return bin(int(hexval, 16))[2:].zfill(128)
+
+def used_count(keystring):
+    occupied = compute_occupied_cells(keystring)
+    return len(occupied)
+
+def compute_occupied_cells(keystring):
+    occupied = set()
+    for i in range(128):
+        hashval = knot_hash('-'.join([keystring, str(i)]))
+        binary = map(int, hextobinary(hashval))
+        occupied.update([(i, j) for j, bit in enumerate(binary) if bit])
     return occupied
 
+def connected_components(keystring):
+    """
+    Simple bfs to find connected components.
+    """
+    num_components = 0
+    unexplored = compute_occupied_cells(keystring)
+
+    while len(unexplored) > 0:
+        q = deque()
+        q.append(next(iter(unexplored)))
+        while len(q) > 0:
+            (x, y) = q.popleft()
+            if (x, y) in unexplored:
+                unexplored.remove((x, y))
+                q.extend([(x - 1, y), (x + 1, y), (x, y + 1), (x, y - 1)])
+        num_components += 1
+        
+    return num_components
+
+
 if __name__ == '__main__':
-    print('Number of occupied squares is %d!' % used_count('hwlqcszp'))
+    keystring = 'hwlqcszp'
+    print('Number of occupied squares is %d!' % used_count(keystring))
+    print('Number of connected components is %d!' % connected_components(keystring))
