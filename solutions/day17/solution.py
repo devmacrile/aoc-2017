@@ -14,5 +14,21 @@ def main(stepsize=366):
 
     return circbuff[(position + 1) % len(circbuff)]
 
+
+def zeroneighbor(iterations=5e7, stepsize=366):
+    zeropos = 0
+    follower = None
+    position = zeropos
+    for i in range(1, int(iterations) + 1):
+        position = (position + stepsize) % i + 1
+        if position - zeropos == 1 or \
+          (position == 0 and zeropos == i):
+            follower = i
+        if position < zeropos:
+            zeropos += 1
+    return follower
+
+
 if __name__ == '__main__':
-    print(main(stepsize=366))
+    #print(main(stepsize=366))
+    print(zeroneighbor())
