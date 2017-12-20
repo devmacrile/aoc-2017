@@ -61,12 +61,14 @@ def main():
                 new_location = add_delta(location, direction_deltas[direction])
                 new_direction = direction
         return new_direction, new_location
-        
+       
     path = []
     direction = 'down'
     location = [0, grid[0].index('|')]
     direction, next_location = getnext(grid, location, direction)
+    steps = 1
     while next_location:
+        steps += 1
         nextchar = gridval(location)
         if nextchar in alphabet:
             path.append(nextchar)
@@ -74,9 +76,9 @@ def main():
         location = next_location
         direction, next_location = getnext(grid, location, direction)
 
-    return ''.join(path)
+    return ''.join(path), steps
 
 
 if __name__ == '__main__':
-    print('Letters encountered in the path are "%s"' % main())
+    print('Letters encountered in the path are "%s" (took %d steps)!' % main())
 
