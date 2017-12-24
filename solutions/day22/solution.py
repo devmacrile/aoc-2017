@@ -30,8 +30,6 @@ def main(bursts=10000):
     turnright = {'up': 'right', 'right': 'down', 'down': 'left', 'left': 'up'}
     turnleft = {v: k for k, v in turnright.iteritems()}
 
-    print(turnleft)
-
     def forward(pos, direction):
         if direction == 'up':
             newpos = (pos[0], pos[1] + 1)
@@ -46,17 +44,23 @@ def main(bursts=10000):
 
     infective_bursts = 0
     for _ in range(bursts):
-        if grid[pos] == '#':
-            direction = turnright[direction]
-            grid[pos] = '.'
-        else:
+        if grid[pos] == '.':
             direction = turnleft[direction]
+            grid[pos] = 'W'
+        elif grid[pos] == 'W':
             grid[pos] = '#'
             infective_bursts += 1
+        elif grid[pos] == '#':
+            direction = turnright[direction]
+            grid[pos] = 'F'
+        else:
+            direction = turnright[turnright[direction]]
+            grid[pos] = '.'
         pos = forward(pos, direction)
 
     return infective_bursts
 
 
 if __name__ == '__main__':
-    print('The number of infective bursts is %d!' % main())
+    print('The number of infective bursts is %d!' % main(bursts=10000000))
+    
