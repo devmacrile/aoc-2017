@@ -52,15 +52,15 @@ def grow_art(art, rules):
     return '/'.join(newart)
 
 
-def main():
+def main(iterations=5):
     rules = load_rules()
     art = '.#./..#/###'
 
-    for i in range(5):
+    for i in range(iterations):
         art = grow_art(art, rules)
 
     return Counter(art)['#']
 
 
 if __name__ == '__main__':
-    print('The number of on pixels after 5 iterations is %d!' % main())
+    print('The number of on pixels after 5 iterations is %d!' % main(iterations=18))
