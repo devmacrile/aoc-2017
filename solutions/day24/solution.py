@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from operator import itemgetter
 
 
 def load_ports(fname='input.txt'):
