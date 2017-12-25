@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from operator import itemgetter
 
 
 def load_ports(fname='input.txt'):
@@ -21,7 +22,7 @@ def main():
     def optbridge(chain, ports, pins=0):
         valid = [p for p in ports if pins in p]
         if not valid:
-            return chainsum(chain)
+            return len(chain), chainsum(chain)  # chainsum(chain)
         else:
             arguments = []
             for v in valid:
@@ -31,10 +32,11 @@ def main():
                 superchain = chain[:]
                 superchain.append(v)
                 arguments.append((superchain, subports, newpins))
-            return max([optbridge(*args) for args in arguments])
+            candidates = [optbridge(*args) for args in arguments]
+            return max(candidates, key=lambda x: x[0] * x[1])
 
     return optbridge([], ports)
 
 
 if __name__ == '__main__':
-    print(main())
+    print('The max length chain is %d, with strength %d!' % main())
