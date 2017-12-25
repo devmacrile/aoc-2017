@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import math
 from collections import defaultdict
 
 
@@ -46,5 +47,56 @@ def main():
 
     return muls
 
+
+def disassembled():
+    a = 1
+    b = 67 * 100 + 100000
+    c = b + 17000
+    g = 1
+
+    while g != 0:
+        f = 1
+        d = 2
+        # for all e, d pairs
+        # check if create b
+        # i.e. b is composite
+        while g != 0:
+            e = 2
+            # from e up to b
+            while g != 0:
+                g = e * d - b
+
+                # check e, d are factors of b
+                # => b is composite
+                if g == 0:
+                    f = 0
+
+                e += 1
+                g = e - b
+            d += 1
+            g = d - b
+
+        # if b is composite
+        if f == 0:
+            h += 1
+
+        g = b - c
+        if g != 0:
+            b += 17
+
+    return h
+
+
+def optimized():
+    lowerbound = 67 * 100 + 100000
+    upperbound = lowerbound + 17000
+    composites = 0
+    for cand in range(lowerbound, upperbound + 1, 17):
+        if any(cand % d == 0 for d in range(2, int(math.sqrt(cand)))):
+            composites += 1
+    return composites
+
+
 if __name__ == '__main__':
-    print('The number of muls is %d!' % main())
+    #print('The number of muls is %d!' % main())
+    print('The (optimized) program returns %d!' % optimized())
