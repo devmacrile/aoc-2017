@@ -53,15 +53,6 @@ def main():
     return index, minaccel, minvel
 
 
-def step(d):
-    d[1][0] += d[2][0]
-    d[1][1] += d[2][1]
-    d[1][2] += d[2][2]
-    d[0][0] += d[1][0]
-    d[0][1] += d[1][1]
-    d[0][2] += d[1][2]
-
-
 def collisions():
     particles = map(lambda x: x[1], list(gen_particles()))
 
@@ -76,7 +67,6 @@ def collisions():
 
     unchanged_steps = 0
     num_particles = len(particles)
-    print(len(particles))
     while unchanged_steps < 1000:
         positions = {}
         delete = []
@@ -85,9 +75,8 @@ def collisions():
         positions = map(lambda x: x[0], particles)
         pcounts = Counter(positions)
         collisions = set([pos for pos, pcount in pcounts.iteritems() if pcount > 1])
-        if collisions:
-            print(collisions, len(collisions))
 
+        # gross, fix all this
         toremove = []
         for i, particle in enumerate(particles):
             if particle[0] in collisions:
